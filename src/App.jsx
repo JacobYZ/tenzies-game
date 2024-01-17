@@ -3,15 +3,6 @@ import Die from "./components/Die";
 import { nanoid } from "nanoid";
 
 export default function App() {
-  /**
-   * Challenge: Add conditional styling to the Die component
-   * so that if it's held (isHeld === true), its background color
-   * changes to a light green (#59E391)
-   *
-   * Remember: currently the Die component has no way of knowing
-   * if it's "held" or not.
-   */
-
   const [dice, setDice] = React.useState(allNewDice());
 
   function allNewDice() {
@@ -19,7 +10,7 @@ export default function App() {
     for (let i = 0; i < 10; i++) {
       newDice.push({
         value: Math.ceil(Math.random() * 6),
-        isHeld: true,
+        isHeld: false,
         id: nanoid(),
       });
     }
@@ -30,11 +21,37 @@ export default function App() {
     setDice(allNewDice());
   }
 
+  /**
+   * Challenge: Update the `holdDice` function to flip
+   * the `isHeld` property on the object in the array
+   * that was clicked, based on the `id` prop passed
+   * into the function.
+   *
+   * Hint: as usual, there's > 1 way to accomplish this.
+   * I'll be using `dice.map()` and checking for the `id`
+   * of the die to determine which one to flip `isHeld` on,
+   * but you can do whichever way makes the most sense to you.
+   */
+  function holdDice(id) {
+    setDice((prevDice) => {
+      return prevDice.map((die) => {
+        if (die.id === id) {
+          return {
+            ...die,
+            isHeld: !die.isHeld,
+          };
+        }
+        return die;
+      });
+    });
+  }
+
   const diceElements = dice.map((die) => (
     <Die
       key={die.id}
       value={die.value}
       isHeld={die.isHeld}
+      holdDice={() => holdDice(die.id)}
     />
   ));
 
@@ -43,7 +60,8 @@ export default function App() {
       <div className="dice-container">{diceElements}</div>
       <button
         className="roll-dice"
-        onClick={rollDice}>
+        onClick={rollDice}
+      >
         Roll
       </button>
     </main>

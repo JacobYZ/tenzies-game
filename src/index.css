@@ -48,11 +48,12 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  border: none;
   cursor: pointer;
 }
 
 .die-num {
-  font-size: 2rem;
+  font-size: 6rem;
 }
 
 .roll-dice {

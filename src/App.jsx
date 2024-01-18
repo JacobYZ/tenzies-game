@@ -94,7 +94,9 @@ export default function App() {
       <div className="stats">
         <p>Rolls: {rolls}</p>
         <p>Time: {time.toFixed(2) + "s"}</p>
-        <p>Best Time: {bestTime.slice(0, 5) + "s"}</p>
+      </div>
+      <div className="best-time">
+        <p>Best Time &#128081; {bestTime.slice(0, 5) + "s"}</p>
       </div>
       <p className="instructions">
         Roll until all dice are the same. Click each die to freeze it at its
@@ -105,7 +107,11 @@ export default function App() {
         className="roll-dice"
         onClick={rollDice}
       >
-        {tenzies ? "Play Again" : isStarted ? "Roll Dice" : "Click any die to start"}
+        {tenzies
+          ? "Play Again"
+          : isStarted
+          ? "Roll Dice"
+          : "Click any die to start"}
       </button>
     </main>
   );

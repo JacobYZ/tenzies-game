@@ -1,30 +1,34 @@
-export default function Die(props) {
-  //put real dice faces on the dice
-  const diceFace =() => {
-    if (props.value === 1) {
-      return "⚀";
-    } else if (props.value === 2) {
-      return "⚁";
-    } else if (props.value === 3) {
-      return "⚂";
-    } else if (props.value === 4) {
-      return "⚃";
-    } else if (props.value === 5) {
-      return "⚄";
-    } else if (props.value === 6) {
-      return "⚅";
-    }
-  }
+import "./die.css";
+
+const Pip = () => <span className="pip" />;
+
+const Face = ({ children, styles, handleClick }) => (
+  <button
+    className="face"
+    style={styles}
+    onClick={handleClick}
+  >
+    {children}
+  </button>
+);
+
+const Die = (props) => {
   const styles = {
     backgroundColor: props.isHeld ? "#59E391" : "white",
   };
+  let pips = Number.isInteger(props.value)
+    ? Array(props.value)
+        .fill(0)
+        .map((_, i) => <Pip key={i} />)
+    : null;
   return (
-    <button
-      className="die-face"
-      style={styles}
-      onClick={props.holdDice}
+    <Face
+      styles={styles}
+      handleClick={props.holdDice}
     >
-      <h2 className="die-num">{diceFace()}</h2>
-    </button>
+      {pips}
+    </Face>
   );
-}
+};
+
+export default Die;

@@ -31,7 +31,7 @@ export default function App() {
         localStorage.setItem("bestTime", time);
       }
     }
-  }, [dice]);
+  }, [dice, bestTime, time]);
 
   function generateNewDie() {
     return {

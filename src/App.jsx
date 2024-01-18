@@ -6,13 +6,27 @@ import { nanoid } from "nanoid";
 export default function App() {
   const [dice, setDice] = React.useState(allNewDice());
   const [tenzies, setTenzies] = React.useState(false);
+  const [isStarted, setIsStarted] = React.useState(false);
+  const [time, setTime] = React.useState(0);
+  const [rolls, setRolls] = React.useState(0);
+  const bestTime = localStorage.getItem("bestTime");
 
   React.useEffect(() => {
-    const allHeld = dice.every((die) => die.isHeld);
-    const firstValue = dice[0].value;
-    const allSameValue = dice.every((die) => die.value === firstValue);
-    if (allHeld && allSameValue) {
+    if (isStarted) {
+      const interval = setInterval(() => {
+        setTime((oldTime) => oldTime + 0.01);
+      }, 10);
+      console.log("interval", interval);
+      return () => clearInterval(interval);
+    }
+  }, [isStarted]);
+  React.useEffect(() => {
+    if (
+      dice.every((die) => die.value === dice[0].value) &&
+      dice.every((die) => die.isHeld)
+    ) {
       setTenzies(true);
+      setIsStarted(false);
     }
   }, [dice]);
 
@@ -39,9 +53,16 @@ export default function App() {
           return die.isHeld ? die : generateNewDie();
         })
       );
+      setRolls((oldRolls) => oldRolls + 1);
     } else {
       setTenzies(false);
       setDice(allNewDice());
+      setIsStarted(false);
+      setRolls(0);
+      setTime(0);
+      if (bestTime === null || time < bestTime) {
+        localStorage.setItem("bestTime", time);
+      }
     }
   }
 
@@ -51,6 +72,10 @@ export default function App() {
         return die.id === id ? { ...die, isHeld: !die.isHeld } : die;
       })
     );
+    if (!isStarted) {
+      setIsStarted(true);
+      setTime(0);
+    }
   }
 
   const diceElements = dice.map((die) => (
@@ -66,6 +91,11 @@ export default function App() {
     <main>
       {tenzies && <Confetti />}
       <h1 className="title">Tenzies</h1>
+      <div className="stats">
+        <p>Rolls: {rolls}</p>
+        <p>Time: {time.toFixed(2) + "s"}</p>
+        <p>Best Time: {bestTime.slice(0, 5) + "s"}</p>
+      </div>
       <p className="instructions">
         Roll until all dice are the same. Click each die to freeze it at its
         current value between rolls.
@@ -75,7 +105,7 @@ export default function App() {
         className="roll-dice"
         onClick={rollDice}
       >
-        {tenzies ? "New Game" : "Roll"}
+        {tenzies ? "Play Again" : isStarted ? "Roll Dice" : "Click any die to start"}
       </button>
     </main>
   );

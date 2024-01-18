@@ -16,7 +16,6 @@ export default function App() {
       const interval = setInterval(() => {
         setTime((oldTime) => oldTime + 0.01);
       }, 10);
-      console.log("interval", interval);
       return () => clearInterval(interval);
     }
   }, [isStarted]);

@@ -27,6 +27,9 @@ export default function App() {
     ) {
       setTenzies(true);
       setIsStarted(false);
+      if (!bestTime || time < bestTime) {
+        localStorage.setItem("bestTime", time);
+      }
     }
   }, [dice]);
 
@@ -60,9 +63,6 @@ export default function App() {
       setIsStarted(false);
       setRolls(0);
       setTime(0);
-      if (bestTime === null || time < bestTime) {
-        localStorage.setItem("bestTime", time);
-      }
     }
   }
 
@@ -96,7 +96,10 @@ export default function App() {
         <p>Time: {time.toFixed(2) + "s"}</p>
       </div>
       <div className="best-time">
-        <p>Best Time &#128081; {bestTime.slice(0, 5) + "s"}</p>
+        <p>
+          Best Time &#128081;{" "}
+          {(bestTime ? bestTime.slice(0, 5) : "00.00") + "s"}
+        </p>
       </div>
       <p className="instructions">
         Roll until all dice are the same. Click each die to freeze it at its

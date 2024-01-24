@@ -1,4 +1,4 @@
-import "./die.css";
+import "./Die.css";
 
 const Pip = () => <span className="pip" />;
 
